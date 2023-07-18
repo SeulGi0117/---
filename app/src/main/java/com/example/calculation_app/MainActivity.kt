@@ -33,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     private var num1 = ""
     private var num2 = ""
     private var operator = ""
+    private var previousButton: Button? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -94,26 +95,27 @@ class MainActivity : AppCompatActivity() {
         }
 
         plus.setOnClickListener {
-            setOperator("+")
+            setOperator("+", plus)
         }
-
         minus.setOnClickListener {
-            setOperator("-")
+            setOperator("-", minus)
         }
 
         div.setOnClickListener {
-            setOperator("/")
+            setOperator("/", div)
         }
         mul.setOnClickListener {
-            setOperator("*")
+            setOperator("*", mul)
         }
 
         clear.setOnClickListener {
             clearCalculation()
+            resetButtonColors()
         }
 
         result.setOnClickListener{
             performCalculation()
+            resetButtonColors()
         }
     }
 
@@ -127,9 +129,17 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun setOperator(op: String){
+    private fun setOperator(op: String, button: Button){
         if (num1.isNotEmpty() && num2.isEmpty()) {
             operator = op
+
+            previousButton?.let {
+                resetButtonColor(it)
+            }
+
+            // 버튼의 색상 변경
+            setButtonColor(button)
+            previousButton = button
         }
     }
 
@@ -151,5 +161,30 @@ class MainActivity : AppCompatActivity() {
         operator = ""
         viewNum.text ="0"
         resultNum.text = ""
+    }
+
+    private fun setButtonColor(button: Button) {
+        button.setBackgroundColor(Color.WHITE)
+        button.setTextColor(Color.parseColor("#FF9800"))
+    }
+
+    private fun resetButtonColor(button: Button) {
+        button.setBackgroundColor(Color.parseColor("#FF9800"))
+        button.setTextColor(Color.WHITE)
+    }
+    private fun resetButtonColors() {
+        plus.setBackgroundColor(Color.parseColor("#FF9800"))
+        plus.setTextColor(Color.WHITE)
+        minus.setBackgroundColor(Color.parseColor("#FF9800"))
+        minus.setTextColor(Color.WHITE)
+        div.setBackgroundColor(Color.parseColor("#FF9800"))
+        div.setTextColor(Color.WHITE)
+        mul.setBackgroundColor(Color.parseColor("#FF9800"))
+        mul.setTextColor(Color.WHITE)
+
+        previousButton?.let {
+            resetButtonColor(it)
+            previousButton = null
+        }
     }
 }
