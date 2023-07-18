@@ -1,5 +1,6 @@
 package com.example.calculation_app
 
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -27,6 +28,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var result: Button
     private lateinit var clear: Button
     private lateinit var viewNum: TextView
+    private lateinit var resultNum: TextView
+
+    private var num1 = ""
+    private var num2 = ""
+    private var operator = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,76 +56,100 @@ class MainActivity : AppCompatActivity() {
             mul = buttonMul
             result = buttonResult
             clear = buttonAc
-            viewNum = tvResult
+            viewNum = tvNum
+            resultNum = tvResult
         }
 
-        var num1 = "0"
-        var num2 = "0"
+
 
         zero.setOnClickListener{
-            num1 = num1 + "0"
-            viewNum.setText(num1)
+            appendNumber("0")
         }
         one.setOnClickListener{
-            num1 = num1 + "1"
-            viewNum.setText(num1)
+            appendNumber("1")
         }
         two.setOnClickListener{
-            num1 = num1 + "2"
-            viewNum.setText(num1)
+            appendNumber("2")
         }
         three.setOnClickListener{
-            num1 = num1 + "3"
-            viewNum.setText(num1)
+            appendNumber("3")
         }
         four.setOnClickListener{
-            num1 = num1 + "4"
-            viewNum.setText(num1)
+            appendNumber("4")
         }
         five.setOnClickListener{
-            num1 = num1 + "5"
-            viewNum.setText(num1)
+            appendNumber("5")
         }
         six.setOnClickListener{
-            num1 = num1 + "6"
-            viewNum.setText(num1)
+            appendNumber("6")
         }
         seven.setOnClickListener{
-            num1 = num1 + "7"
-            viewNum.setText(num1)
+            appendNumber("7")
         }
         eight.setOnClickListener{
-            num1 = num1 + "8"
-            viewNum.setText(num1)
+            appendNumber("8")
         }
         nine.setOnClickListener{
-            num1 = num1 + "9"
-            viewNum.setText(num1)
+            appendNumber("9")
         }
 
         plus.setOnClickListener {
-            num2 = (num2.toInt() + num1.toInt()).toString()
-            num1 = "0"
-            viewNum.setText(num2)
+            setOperator("+")
         }
 
         minus.setOnClickListener {
-            num2 = (num2.toInt() - num1.toInt()).toString()
-            num1= "0"
-            viewNum.setText(num2)
+            setOperator("-")
+        }
+
+        div.setOnClickListener {
+            setOperator("/")
+        }
+        mul.setOnClickListener {
+            setOperator("*")
         }
 
         clear.setOnClickListener {
-            num1 = "0"
-            num2 = "0"
-            viewNum.setText("0")
+            clearCalculation()
         }
 
         result.setOnClickListener{
-
+            performCalculation()
         }
+    }
 
+    private fun appendNumber(number: String) {
+        if(operator.isEmpty()) {
+            num1+=number
+            viewNum.text = num1
+        } else {
+            num2 += number
+            viewNum.text = num2
+        }
+    }
 
+    private fun setOperator(op: String){
+        if (num1.isNotEmpty() && num2.isEmpty()) {
+            operator = op
+        }
+    }
 
+    private fun performCalculation() {
+        if (num1.isNotEmpty() && num2.isNotEmpty()) {
+            val result = when (operator) {
+                "+" -> num1.toInt() + num2.toInt()
+                "-" -> num1.toInt() - num2.toInt()
+                "*" -> num1.toInt() * num2.toInt()
+                "/" -> num1.toInt() / num2.toInt()
+                else -> 0
+            }
+            resultNum.text = result.toString()
+        }
+    }
+    private fun clearCalculation() {
+        num1 = ""
+        num2 = ""
+        operator = ""
+        viewNum.text ="0"
+        resultNum.text = ""
     }
 }
